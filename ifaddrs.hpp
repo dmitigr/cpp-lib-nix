@@ -92,6 +92,9 @@ private:
 
 /**
  * @returns A textual representation of a physical address of `iaa`.
+ *
+ * @par Requires
+ * `iaa.ifa_addr && iaa.ifa_addr->sa_family == AF_PACKET`.
  */
 inline std::string physical_address_string(const ifaddrs& iaa,
   const std::string_view delimiter = "-")
