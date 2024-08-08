@@ -14,9 +14,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef DMITIGR_LIN_LIN_HPP
-#define DMITIGR_LIN_LIN_HPP
+#ifndef DMITIGR_NIX_NIX_HPP
+#define DMITIGR_NIX_NIX_HPP
 
 #include "ifaddrs.hpp"
 
-#endif  // DMITIGR_LIN_LIN_HPP
+#endif  // DMITIGR_NIX_NIX_HPP

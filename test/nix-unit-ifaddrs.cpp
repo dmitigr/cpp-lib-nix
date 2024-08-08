@@ -15,22 +15,27 @@
 // limitations under the License.
 
 #include "../../base/assert.hpp"
-#include "../lin.hpp"
+#include "../nix.hpp"
 
 int main()
 {
   try {
-    namespace lin = dmitigr::lin;
+    namespace nix = dmitigr::nix;
 
     using std::cout;
     using std::endl;
 
-    if (const auto iaas = lin::Ip_adapter_addresses::from_system()) {
+    if (const auto iaas = nix::Ip_adapter_addresses::from_system()) {
       for (auto* iaa = iaas.head(); iaa; iaa = iaa->ifa_next) {
         const auto family = iaa->ifa_addr->sa_family;
-        if (family == AF_PACKET) {
+#ifdef __linux__
+        constexpr auto fam = AF_PACKET;
+#else
+        constexpr auto fam = AF_LINK;
+#endif
+        if (family == fam) {
           cout << "Adapter " << iaa->ifa_name << ":" << endl;
-          const auto mac = lin::physical_address_string(*iaa);
+          const auto mac = nix::physical_address_string(*iaa);
           cout << "  physical address: " << (mac.empty() ? "null" : mac) << endl;
         }
       }

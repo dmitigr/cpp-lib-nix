@@ -18,24 +18,24 @@
 # Info
 # ------------------------------------------------------------------------------
 
-dmitigr_libs_set_library_info(lin 0 0 0 "Linux specific")
+dmitigr_libs_set_library_info(nix 0 0 0 "Unix specific")
 
 # ------------------------------------------------------------------------------
 # Sources
 # ------------------------------------------------------------------------------
 
-set(dmitigr_lin_headers
+set(dmitigr_nix_headers
   ifaddrs.hpp
   )
 
-set(dmitigr_lin_implementations
+set(dmitigr_nix_implementations
   )
 
 # ------------------------------------------------------------------------------
 # Dependencies
 # ------------------------------------------------------------------------------
 
-set(dmitigr_libs_lin_deps base)
+set(dmitigr_libs_nix_deps base)
 
 # ------------------------------------------------------------------------------
 # Tests
@@ -43,7 +43,7 @@ set(dmitigr_libs_lin_deps base)
 
 if(DMITIGR_LIBS_TESTS)
   if(UNIX AND NOT CMAKE_SYSTEM_NAME MATCHES MSYS|MinGW|Cygwin)
-    set(dmitigr_lin_tests ifaddrs)
-    set(dmitigr_lin_tests_target_link_libraries dmitigr_base)
+    set(dmitigr_nix_tests ifaddrs)
+    set(dmitigr_nix_tests_target_link_libraries dmitigr_base)
   endif()
 endif()

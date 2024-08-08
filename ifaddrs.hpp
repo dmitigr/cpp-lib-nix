@@ -14,11 +14,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef DMITIGR_LIN_IFADDRS_HPP
-#define DMITIGR_LIN_IFADDRS_HPP
+#ifndef DMITIGR_NIX_IFADDRS_HPP
+#define DMITIGR_NIX_IFADDRS_HPP
 
 #if !defined(__linux__) && !defined(__APPLE__)
-#error dmitigr/lin/ifaddrs.hpp is usable only on Linux or macOS!
+#error dmitigr/nix/ifaddrs.hpp is usable only on Linux or macOS!
 #endif
 
 #include "../str/transform.hpp"
@@ -41,7 +41,7 @@
 #endif
 #include <net/ethernet.h> /* the L2 protocols */
 
-namespace dmitigr::lin {
+namespace dmitigr::nix {
 
 /// A wrapper around ifaddrs.
 class Ip_adapter_addresses final {
@@ -79,7 +79,7 @@ public:
   {
     if (!is_valid())
       throw std::logic_error{"cannot use invalid instance of type"
-        " dmitigr::lin::Ip_adapter_addresses"};
+        " dmitigr::nix::Ip_adapter_addresses"};
     return reinterpret_cast<const ifaddrs*>(data_.get());
   }
 
@@ -127,6 +127,6 @@ inline std::string physical_address_string(const ifaddrs& iaa,
   return dmitigr::str::sparsed_string(addr, dmitigr::str::Byte_format::hex, delimiter);
 }
 
-} // namespace dmitigr::lin
+} // namespace dmitigr::nix
 
-#endif  // DMITIGR_LIN_IFADDRS_HPP
+#endif  // DMITIGR_NIX_IFADDRS_HPP
