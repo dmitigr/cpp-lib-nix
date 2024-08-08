@@ -17,8 +17,8 @@
 #ifndef DMITIGR_LIN_IFADDRS_HPP
 #define DMITIGR_LIN_IFADDRS_HPP
 
-#ifndef __linux__
-#error dmitigr/lin/ifaddrs.hpp is usable only on Linux!
+#if !defined(__linux__) && !defined(__APPLE__)
+#error dmitigr/lin/ifaddrs.hpp is usable only on Linux or macOS!
 #endif
 
 #include "../str/transform.hpp"
@@ -34,7 +34,11 @@
 
 // packet(7)
 #include <sys/socket.h>
+#ifdef __linux__
 #include <linux/if_packet.h>
+#else
+#include <net/if_dl.h>
+#endif
 #include <net/ethernet.h> /* the L2 protocols */
 
 namespace dmitigr::lin {
@@ -94,19 +98,33 @@ private:
  * @returns A textual representation of a physical address of `iaa`.
  *
  * @par Requires
- * `iaa.ifa_addr && iaa.ifa_addr->sa_family == AF_PACKET`.
+ * On Linux: `iaa.ifa_addr && iaa.ifa_addr->sa_family == AF_PACKET`.
+ * On macOS: `iaa.ifa_addr && iaa.ifa_addr->sa_family == AF_LINK`.
  */
 inline std::string physical_address_string(const ifaddrs& iaa,
   const std::string_view delimiter = "-")
 {
-  if (!iaa.ifa_addr || iaa.ifa_addr->sa_family != AF_PACKET)
-    throw std::invalid_argument{"cannot get physical address from not AF_PACKET family"};
+#ifdef __linux__
+  constexpr auto family = AF_PACKET;
+#else
+  constexpr auto family = AF_LINK;
+#endif
+  if (!iaa.ifa_addr || iaa.ifa_addr->sa_family != family)
+    throw std::invalid_argument{"cannot get physical address: unexpected interface family"};
 
-  const auto* const sll = reinterpret_cast<const sockaddr_ll*>(iaa.ifa_addr);
+#ifdef __linux__
+  using Link_level_sockaddr = sockaddr_ll;
+#else
+  using Link_level_sockaddr = sockaddr_dl;
+#endif
+  const auto* const sll = reinterpret_cast<const Link_level_sockaddr*>(iaa.ifa_addr);
 
-  return dmitigr::str::sparsed_string(std::string_view{
-      reinterpret_cast<const char*>(sll->sll_addr), sll->sll_halen},
-    dmitigr::str::Byte_format::hex, delimiter);
+#ifdef __linux__
+  const std::string_view addr{reinterpret_cast<const char*>(sll->sll_addr), sll->sll_halen};
+#else
+  const std::string_view addr{LLADDR(sll), sll->sdl_alen};
+#endif
+  return dmitigr::str::sparsed_string(addr, dmitigr::str::Byte_format::hex, delimiter);
 }
 
 } // namespace dmitigr::lin
