@@ -14,12 +14,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef DMITIGR_NIX_IFADDRS_HPP
-#define DMITIGR_NIX_IFADDRS_HPP
-
 #if !defined(__linux__) && !defined(__APPLE__)
 #error dmitigr/nix/ifaddrs.hpp is usable only on Linux or macOS!
 #endif
+
+#ifndef DMITIGR_NIX_IFADDRS_HPP
+#define DMITIGR_NIX_IFADDRS_HPP
 
 #include "../str/transform.hpp"
 

@@ -17,6 +17,7 @@
 #ifndef DMITIGR_NIX_NIX_HPP
 #define DMITIGR_NIX_NIX_HPP
 
+#include "detach.hpp"
 #include "ifaddrs.hpp"
 
 #endif  // DMITIGR_NIX_NIX_HPP
