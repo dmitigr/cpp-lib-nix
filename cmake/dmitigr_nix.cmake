@@ -37,7 +37,7 @@ set(dmitigr_nix_implementations
 # Dependencies
 # ------------------------------------------------------------------------------
 
-set(dmitigr_libs_nix_deps base fsx log os)
+set(dmitigr_libs_nix_deps base fsx log os str)
 
 # ------------------------------------------------------------------------------
 # Tests
@@ -45,6 +45,9 @@ set(dmitigr_libs_nix_deps base fsx log os)
 
 if(DMITIGR_LIBS_TESTS)
   if(UNIX AND NOT CMAKE_SYSTEM_NAME MATCHES MSYS|MinGW|Cygwin)
-    set(dmitigr_nix_tests detach ifaddrs sysctl)
+    set(dmitigr_nix_tests detach ifaddrs)
+  endif()
+  if(UNIX AND NOT LINUX)
+    list(APPEND dmitigr_nix_tests sysctl)
   endif()
 endif()

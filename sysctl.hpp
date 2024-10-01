@@ -21,6 +21,8 @@
 #ifndef DMITIGR_NIX_SYSCTL_HPP
 #define DMITIGR_NIX_SYSCTL_HPP
 
+#include "../str/transform.hpp"
+
 #include <string>
 #include <system_error>
 
@@ -42,6 +44,7 @@ inline std::string sysctl(const std::string& name)
     result.resize(result_size);
     if (sysctlbyname(name.c_str(), result.data(), &result_size, nullptr, 0))
       throw_error(errno);
+    str::trim(result);
   } else
     throw_error(errno);
   return result;
