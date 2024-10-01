@@ -38,14 +38,12 @@ inline std::string sysctl(const std::string& name)
   };
   std::string result;
   std::size_t result_size{};
-  if (sysctlbyname(name.c_str(), result.data(), &result_size, nullptr, 0)) {
-    if (errno == ENOMEM) {
-      result.resize(result_size);
-      if (sysctlbyname(name.c_str(), result.data(), &result_size, nullptr, 0))
-        throw_error(errno);
-    } else
+  if (!sysctlbyname(name.c_str(), nullptr, &result_size, nullptr, 0)) {
+    result.resize(result_size);
+    if (sysctlbyname(name.c_str(), result.data(), &result_size, nullptr, 0))
       throw_error(errno);
-  }
+  } else
+    throw_error(errno);
   return result;
 }
 

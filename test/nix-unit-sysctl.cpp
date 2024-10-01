@@ -25,7 +25,8 @@ int main()
     using std::cout;
     using std::endl;
 
-    cout << "kern.osproductversion = "<<nix::sysctl("kern.osproductversion")<<endl;
+    cout << "kern.osproductversion: "<<nix::sysctl("kern.osproductversion")<<endl;
+    cout << "machdep.cpu.brand_string: "<<nix::sysctl("machdep.cpu.brand_string")<<endl;
   } catch (const std::exception& e) {
     std::cerr << e.what() << std::endl;
     return 1;
