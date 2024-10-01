@@ -27,6 +27,7 @@ dmitigr_libs_set_library_info(nix 0 0 0 "Unix specific")
 set(dmitigr_nix_headers
   detach.hpp
   ifaddrs.hpp
+  sysctl.hpp
   )
 
 set(dmitigr_nix_implementations

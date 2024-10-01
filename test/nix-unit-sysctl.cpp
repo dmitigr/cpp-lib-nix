@@ -14,16 +14,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef DMITIGR_NIX_NIX_HPP
-#define DMITIGR_NIX_NIX_HPP
+#include "../../base/assert.hpp"
+#include "../sysctl.hpp"
 
-#if defined(__linux__) || defined(__APPLE__)
-#include "detach.hpp"
-#include "ifaddrs.hpp"
-#endif
+int main()
+{
+  try {
+    namespace nix = dmitigr::nix;
 
-#if defined(__FreeBSD__) || defined(__APPLE__)
-#include "sysctl.hpp"
-#endif
+    using std::cout;
+    using std::endl;
 
-#endif  // DMITIGR_NIX_NIX_HPP
+    cout << "kern.osproductversion = "<<nix::sysctl("kern.osproductversion")<<endl;
+  } catch (const std::exception& e) {
+    std::cerr << e.what() << std::endl;
+    return 1;
+  } catch (...) {
+    std::cerr << "unknown error" << std::endl;
+    return 2;
+  }
+}
