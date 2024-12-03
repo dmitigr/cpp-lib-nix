@@ -25,6 +25,7 @@
 #include "../base/fsx.hpp"
 #include "../log/log.hpp"
 #include "../os/error.hpp"
+#include "../os/pid.hpp"
 
 #include <cstdlib>
 #include <cstring>
@@ -115,7 +116,7 @@ inline void detach(const std::function<void()>& startup,
 
   // Creating the PID file
   try {
-    log::dump_pid(pid_file);
+    os::dump_pid(pid_file);
   } catch (const std::exception& e) {
     log::clog() << e.what() << '\n';
     std::exit(EXIT_FAILURE);
@@ -238,7 +239,7 @@ inline void start(const bool detach,
     }
 
     if (!pid_file.empty())
-      log::dump_pid(pid_file);
+      os::dump_pid(pid_file);
 
     if (!log_file.empty())
       log::redirect_clog(log_file, log_file_mode);
