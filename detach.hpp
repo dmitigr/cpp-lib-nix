@@ -22,7 +22,7 @@
 #define DMITIGR_NIX_DETACH_HPP
 
 #include "../base/assert.hpp"
-#include "../fsx/filesystem.hpp"
+#include "../base/fsx.hpp"
 #include "../log/log.hpp"
 #include "../os/error.hpp"
 
