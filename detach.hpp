@@ -23,7 +23,7 @@
 
 #include "../base/assert.hpp"
 #include "../base/fsx.hpp"
-#include "../log/log.hpp"
+#include "../base/log.hpp"
 #include "error.hpp"
 
 #include <cstdlib>
