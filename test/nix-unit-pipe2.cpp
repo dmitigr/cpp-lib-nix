@@ -3,8 +3,9 @@
 // Copyright 2025 Dmitry Igrishin
 
 #include "../../base/assert.hpp"
-#include "../../base/fsx.hpp"
 #include "../../nix/ipc_pipe.hpp"
+
+#include <filesystem>
 
 #include <sys/types.h>
 #include <signal.h>
