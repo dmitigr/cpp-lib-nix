@@ -38,7 +38,7 @@ set(dmitigr_nix_implementations
 # Dependencies
 # ------------------------------------------------------------------------------
 
-set(dmitigr_libs_nix_deps base log os str)
+set(dmitigr_libs_nix_deps base log str)
 
 # ------------------------------------------------------------------------------
 # Tests

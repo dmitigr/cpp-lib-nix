@@ -24,17 +24,18 @@
 #include "../base/assert.hpp"
 #include "../base/fsx.hpp"
 #include "../log/log.hpp"
-#include "../os/error.hpp"
-#include "../os/pid.hpp"
+#include "error.hpp"
 
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include <functional>
+#include <string>
 #include <system_error>
 
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 namespace dmitigr::nix {
 
@@ -79,7 +80,7 @@ inline void detach(const std::function<void()>& startup,
   // Forking for a first time
   if (const auto pid = ::fork(); pid < 0) {
     const int err = errno;
-    log::clog() << "first fork() failed (" << os::error_message(err) << ")\n";
+    log::clog() << "first fork() failed (" << error_message(err) << ")\n";
     std::exit(EXIT_FAILURE); // exit parent
   } else if (pid > 0)
     std::exit(EXIT_SUCCESS); // exit parent
@@ -102,21 +103,21 @@ inline void detach(const std::function<void()>& startup,
   if (const auto sid = ::setsid(); sid < 0) {
     const int err = errno;
     log::clog() << "cannot setup the new process group leader ("
-                << os::error_message(err) << ")\n";
+                << error_message(err) << ")\n";
     std::exit(EXIT_FAILURE);
   }
 
   // Forking for a second time
   if (const auto pid = ::fork(); pid < 0) {
     const int err = errno;
-    log::clog() << "second fork() failed (" << os::error_message(err) << ")\n";
+    log::clog() << "second fork() failed (" << error_message(err) << ")\n";
     std::exit(EXIT_FAILURE);
   } else if (pid > 0)
     std::exit(EXIT_SUCCESS);
 
   // Creating the PID file
   try {
-    os::dump_pid(pid_file);
+    fsx::overwrite(pid_file, std::to_string(getpid()));
   } catch (const std::exception& e) {
     log::clog() << e.what() << '\n';
     std::exit(EXIT_FAILURE);
@@ -143,7 +144,7 @@ inline void detach(const std::function<void()>& startup,
     if (::close(fd)) {
       const int err = errno;
       log::clog() << "cannot close file descriptor " << fd
-                  << " (" << os::error_message(err) << ")\n";
+                  << " (" << error_message(err) << ")\n";
       std::exit(EXIT_FAILURE);
     }
   };
@@ -239,7 +240,7 @@ inline void start(const bool detach,
     }
 
     if (!pid_file.empty())
-      os::dump_pid(pid_file);
+      fsx::overwrite(pid_file, std::to_string(getpid()));
 
     if (!log_file.empty())
       log::redirect_clog(log_file, log_file_mode);
