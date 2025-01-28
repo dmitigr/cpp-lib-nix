@@ -1,6 +1,6 @@
 # -*- cmake -*-
 #
-# Copyright 2024 Dmitry Igrishin
+# Copyright 2025 Dmitry Igrishin
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ dmitigr_libs_set_library_info(nix 0 0 0 "Unix specific")
 set(dmitigr_nix_headers
   detach.hpp
   ifaddrs.hpp
+  ipc_pipe.hpp
   sysctl.hpp
   )
 
@@ -49,5 +50,8 @@ if(DMITIGR_LIBS_TESTS)
   endif()
   if(UNIX AND NOT LINUX)
     list(APPEND dmitigr_nix_tests sysctl)
+  endif()
+ if(LINUX)
+    list(APPEND dmitigr_nix_tests pipe pipe2 slow_write)
   endif()
 endif()
